@@ -3,8 +3,13 @@ name: CI
 on:
   push:
     branches:
+      - master
       - main
   pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
 
 jobs:
   linux-build-test:
@@ -38,12 +43,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup MSVC developer command prompt
-        uses: ilammy/msvc-dev-cmd@v1
-
       - name: Build and run tests
         shell: cmd
         run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do set VS_INSTALL=%%i
+          call "%VS_INSTALL%\Common7\Tools\VsDevCmd.bat" -arch=x64 -host_arch=x64
           if not exist build\bin mkdir build\bin
           if not exist build\test\reports mkdir build\test\reports
           cl /nologo /W4 /EHsc /std:c++14 /Fe:build\bin\sbet-decoder.exe src\sbet-decoder.cpp src\SbetProcessor.cpp

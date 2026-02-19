@@ -58,6 +58,7 @@ Additional format examples are documented in `doc/README.md`.
 
 Continuous integration is provided with GitHub Actions in
 `.github/workflows/ci.yml`.
+It uses GitHub-hosted runners only (no self-hosted runner required).
 The workflow validates:
 - Linux build and tests
 - Windows build and tests
